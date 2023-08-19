@@ -16,14 +16,12 @@
 
 
   const submitEntry: SubmitFunction = ({formElement, formData, action, cancel}) => {
-    const {entry} = Object.fromEntries(formData)
+    const {title} = Object.fromEntries(formData)
     console.log('form', formElement);
     console.log('data', formData);
     console.log('action', action);
-    console.log(entry);
-    
-    cancel();
   }
+
 </script>
 
 <svelte:head>
@@ -55,16 +53,16 @@
 			</thead>
 			<tbody>
 				<!-- row 1 -->
-				{#if data.songs.length > 0}
-					{#each data.songs as song, i}
+				{#if data.entries.data.length > 0}
+					{#each data.entries.data as song, i}
 						<tr>
 							<th>{i + 1}</th>
-							<td>{song.entry}</td>
+							<td>{song.title}</td>
 							<td>
 								<div class="btn-group btn-group-horizontal lg:btn-group-horizontal">
 									<button class="btn btn-sm">Up</button>
 									<button class="btn btn-sm btn-active no-animation">
-										{song.pool}
+										{song.votes}
 									</button>
 									<button class="btn btn-sm">Down</button>
 								</div>
@@ -80,14 +78,14 @@
 <div class="divider" />
 
 <section>
-	<form method="POST" use:enhance={submitEntry}>
+	<form action="?/submit_song" method="POST" use:enhance={submitEntry}>
 		<div class="form-control w-full max-w-xs mb-5">
-			<label class="label font-bold" for="#entry">
+			<label class="label font-bold" for="#title">
 				<span class="label-text">SUBMIT YOUR FAVORITE SONG</span>
 			</label>
 			<input
-				id="entry"
-				name="entry"
+				id="title"
+				name="title"
 				type="text"
 				placeholder="ex: Selamatkan Tanah - Zun Fuyuzora"
 				class="input input-bordered w-full max-w-xs"

@@ -11,7 +11,6 @@ interface APIParams{
 export async function api(params: APIParams) {
     const base = API_URL
     let fullurl = base
-
     
 
     if (params.resource) {

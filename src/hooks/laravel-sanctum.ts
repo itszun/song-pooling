@@ -32,7 +32,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 				sanctum.headers.get('set-cookie') ?? ''
 			)
 		}
-        console.log(sanctum)
+        // console.log(sanctum)
 	}
 
     return resolve(event)

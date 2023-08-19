@@ -1,6 +1,7 @@
 import type { RequestEvent } from '@sveltejs/kit';
+import { APP_URL } from '$env/static/private';
 import type { PageServerLoad, Actions } from './$types';
-
+import { api } from '../api';
 
 let songs: Array<Object> = [
 	{
@@ -17,27 +18,38 @@ let songs: Array<Object> = [
 	}
 ];
 
-export const load: PageServerLoad = () => {
-    return {
-        songs
-    }
-}
+export const load = ({}) => {
+	const fetchPosts = async () => {
+		const res = await fetch(APP_URL + '/api/song');
+		const data = await res.json();
+
+		return data;
+	};
+
+	return {
+		songs,
+		entries: fetchPosts()
+	};
+};
 
 export const actions: Actions = {
-    default: async ({request}: RequestEvent) => {
-        const formData = await request.formData()
+	submit_song: async ({ request }) => {
+		const formData = await request.clone().formData();
+	
+		const res = await fetch(APP_URL + '/api/song', {
+			method: 'POST',
+			headers: {
+				'content-type': 'application/json',
+				'accept': 'application/json',
+			},
+			body: formData
+		});
 
-		const entry = formData.get("entry")
+		console.log("DATA ", formData);
+		
 
-		const song = {
-			entry,
-			pool: 1
-		}
+		const data = await res.json();
 
-		songs.push(song)
-
-		return {
-			success: true
-		}
-    }
-}
+		return data;
+	}
+};
